@@ -1,0 +1,8 @@
+#+title: Readme - Bootstrap Seed for Debian Family Linux
+#+date: <2024-10-23 Wed>
+
+** Background:
+Project Hosted: Github
+
+** Use:
+1. wget
