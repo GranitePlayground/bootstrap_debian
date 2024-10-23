@@ -3,11 +3,21 @@
 
 ** Background:
 Project Hosted: Github
+
+This Script is designed to take a fresh install of Debian family linux to the point of Anible Automation.
+
+  - Apt - update and upgrade
+  - openSSH - install and configure
+  - Git - install
+  - Ansible - install
+
 *** Note -
-This script will remove itself after run if run from your home folder.
+- This script is designed remove itself after running from your home folder.
+- WARNING - root ssh lockout default behavior
+
 
 ** Use:
 To use pull the RAW bash script file from github
-  1. wget https://raw.githubusercontent.com/GranitePlayground/bootstrap_seed_debian/refs/heads/main/bootstrap_seed_debian.sh
-  2. chmod +x
-  3. bash bootstrap_seed_debian
+  1. ~wget https://raw.githubusercontent.com/GranitePlayground/bootstrap_seed_debian/refs/heads/main/bootstrap_seed_debian.sh~
+  2. ~chmod +x bootstrap_seed_debian.ssh~
+  3. ~bash bootstrap_seed_debian~
