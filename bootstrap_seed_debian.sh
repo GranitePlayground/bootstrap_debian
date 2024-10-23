@@ -1,13 +1,6 @@
 #!/bin/bash
 ### --- Debian Bootstrap Seed ---
 
-### - TODO -
-## + add git user info injections
-## +   ask at beginning
-## +   inject or default as provided
-## + when running outside of git file, delete file after running
-
-##
 ### VARS
 update_upgrade=true
 install_ssh=true
