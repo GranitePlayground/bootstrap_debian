@@ -1,19 +1,16 @@
 #+title: Readme - Bootstrap Seed for Debian Family Linux
 #+date: <2024-10-23 Wed>
 
-** Background:
-Project Hosted: Github
-
-This Script is designed to take a fresh install of Debian family linux to the point of Anible Automation.
+** Notes:
+This bash script is designed to quickly take a fresh install of Debian family linux to the point of Anible automation.
+WARNING - root ssh lockout default behavior
+NOTE - This script is designed remove itself when run from your home folder.
 
   - Apt - update and upgrade
   - openSSH - install and configure
   - Git - install
   - Ansible - install
-
-*** Note -
-- This script is designed remove itself after running from your home folder.
-- WARNING - root ssh lockout default behavior
+  - remove script from home folder
 
 
 ** Use:
