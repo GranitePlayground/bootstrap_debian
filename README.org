@@ -20,7 +20,7 @@ To use pull the RAW bash script file from github
   3. ~bash bootstrap_seed_debian.sh~
 
 
-** Todo
+** Todo:
 + add git user info injections
   - ask at beginning
   - inject or default as provided
