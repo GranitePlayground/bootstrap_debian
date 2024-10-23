@@ -3,7 +3,7 @@
 
 ** Notes:
 This bash script is designed to quickly take a fresh install of Debian family linux to the point of Anible automation.
-WARNING - root ssh lockout default behavior
+WARNING - root ssh lockout is default behavior
 NOTE - This script is designed remove itself when run from your home folder.
 
   - Apt - update and upgrade
@@ -17,4 +17,11 @@ NOTE - This script is designed remove itself when run from your home folder.
 To use pull the RAW bash script file from github
   1. ~wget https://raw.githubusercontent.com/GranitePlayground/bootstrap_seed_debian/refs/heads/main/bootstrap_seed_debian.sh~
   2. ~chmod +x bootstrap_seed_debian.ssh~
-  3. ~bash bootstrap_seed_debian~
+  3. ~bash bootstrap_seed_debian.sh~
+
+
+** TODO
++ add git user info injections
+  - ask at beginning
+  - inject or default as provided
++ add ssh public key deployment
