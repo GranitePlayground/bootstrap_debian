@@ -3,6 +3,11 @@
 
 ** Background:
 Project Hosted: Github
+*** Note -
+This script will remove itself after run if run from your home folder.
 
 ** Use:
-1. wget
+To use pull the RAW bash script file from github
+  1. wget https://raw.githubusercontent.com/GranitePlayground/bootstrap_seed_debian/refs/heads/main/bootstrap_seed_debian.sh
+  2. chmod +x
+  3. bash bootstrap_seed_debian

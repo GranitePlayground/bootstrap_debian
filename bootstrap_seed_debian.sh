@@ -5,7 +5,9 @@
 ## + add git user info injections
 ## +   ask at beginning
 ## +   inject or default as provided
+## + when running outside of git file, delete file after running
 
+##
 ### VARS
 update_upgrade=true
 install_ssh=true
@@ -13,13 +15,14 @@ root_ssh_lockout=true
 install_git=true
 install_ansible=true
 
+##
 ### START & PROMPT FOR SUDO PASSWARD
 echo -e "\n --- STARTING - SYSTEM BOOTSTRAP SEED --- \n"
 
 echo "Please enter your sudo password to continue:"
 sudo -v
 
-#
+##
 ### NEW SYSTEM UPDATES
 if [ "$update_upgrade" = true ]; then
     sudo apt update && sudo apt upgrade -y
@@ -27,7 +30,7 @@ else
     echo -e "\nSkipping - Update/Upgrade - see script vars for more info\n"
 fi
 
-#
+##
 ### INSTALL - OPENSSH
 if [ "$install_ssh" = true ]; then
     echo -e "\n - INSTALLING - openSSH - \n"
@@ -56,12 +59,11 @@ else
     echo -e "\n  Skipping OpenSSH installation and configuration.\n"
 fi
 
-#
+##
 ### INSTALL - GIT
 if [ "$install_git" = true ]; then
     echo -e "\n - INSTALLING - Git - \n"
 
-    ## Install Git
     sudo apt install -y git
 
     ## Optionally, global Git settings
@@ -73,18 +75,36 @@ else
     echo -e "\n  Skipping Git installation.\n"
 fi
 
-#
+##
 ### INSTALL - ANSIBLE
 if [ "$install_ansible" = true ]; then
     echo -e "\n - INSTALLING - Ansible - \n"
 
-    ## Install Ansible
     sudo apt install -y ansible
     echo -e "\n  Ansible installation complete.\n"
 else
     echo -e "\n  Skipping Ansible installation.\n"
 fi
 
-#
-### START & PROMPT FOR SUDO PASSWARD
-echo -e "\n\n --- DONE - BOOTSTRAP SEED --- \n"
+##
+### DELETE IF IN A HOME FOLDER
+
+## Get the script's current directory
+SCRIPT_DIR=$(dirname "$(realpath "$0")")
+
+## Get the user's home directory
+HOME_DIR="$HOME"
+
+## Check if the script is located in the home directory
+if [[ "$SCRIPT_DIR" == "$HOME_DIR" ]]; then
+    echo "Script removed after successful run."
+
+    ## delete after execution
+    rm -- "$0"
+else
+    echo "the script is located at $SCRIPT_DIR and has not been removed."
+fi
+
+##
+### END MESSAGE
+echo -e "\n --- DONE - BOOTSTRAP SEED --- \n\n"
