@@ -1,105 +1,80 @@
 #!/bin/bash
+set -e
 ### --- Debian Bootstrap Seed ---
 
-### VARS
-update_upgrade=true
-install_ssh=true
-root_ssh_lockout=true
-install_git=true
-install_ansible=true
-# Replace with your SSH public key
-SSH_PUBLIC_KEY="ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCp2S2vS0PZnw7hCBoEo+N4CXiw0rfz2mBPxTHZ4jglqizM0d4ImT8FaEzfTFmmdVBHkt1mNHhexRbEK2lqA+C1E82ANHYu+tHG+O0ct7QOUJ2E7GaacybUiskco1l24fRh5wDvs+PoEPyGGJylN1xd7ESvDN5f/J3KKvnww7vPg7zpNYJeC1c6QXVwmCm7bC/aBjMC+N4jyl5t7AkYmU1wWcLmVhJzOI3jm4iuD4jiniMupdl+y0prI14TIY+WjvafdknRda8I44FagRV7uzFutBF1NongB23GHulQHOZgK+TF1qdu8ozjV9r4aC5uUmPv+bQ1brhtZiJdkbEVLFXFdDIKys+HvivU2plENpbSbG788BEgXCq1CxdWLFXCOlanFhiAT1Xgxq73j4XcWIaG9YDvg9qjzX936OfJ6YetQEXUYcKwr6YH4YRQt+b1befH8FcREOuLmqmR+qUfrAbdlWtaNp0w4Ws4DXPXcna4Kvf26z+NhYLagC4BeICqf9M= laverne@Laverne.local"
+### - VARS -
+UPDATE_UPGRADE=true
+INSTALL_SSH=true
+ROOT_SSH_LOCKOUT=true
+INSTALL_GIT=true
+INSTALL_ANSIBLE=true
+ADD_PUBLIC_KEY=true
+SSH_PUBLIC_KEY= # insert public key here.
 
-##
-### START & PROMPT FOR SUDO PASSWARD
-echo -e "\n --- STARTING - SYSTEM BOOTSTRAP SEED --- \n"
-echo "Please enter your sudo password to continue:"
-sudo -v
-
-##
-### NEW SYSTEM UPDATES
-if [ "$update_upgrade" = true ]; then
+### - FUNCTIONS -
+update_system() {
+    echo -e "\n  Updating and upgrading system...\n"
     sudo apt update && sudo apt upgrade -y
-else
-    echo -e "\nSkipping - Update/Upgrade - see script vars for more info\n"
-fi
+    echo -e "\n  System is up-to-date.\n"
+}
 
-##
-### INSTALL - OPENSSH
-if [ "$install_ssh" = true ]; then
-    echo -e "\n - INSTALLING - openSSH - \n"
-    ## Install OpenSSH server
+install_ssh() {
+    echo -e "\n  Installing OpenSSH server...\n"
     sudo apt install -y openssh-server
-    ## Enable and start the SSH service
     sudo systemctl enable ssh
     sudo systemctl start ssh
-    ## Optionally, Root SSH Login Disabled
-    if [ "$root_ssh_lockout" = true ]; then
+    if [ "$ROOT_SSH_LOCKOUT" = true ]; then
         sudo sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin no/' /etc/ssh/sshd_config
-        echo -e "\n  Root SSH Log-in - Disabled"
-    else
-        echo -e "\n  Root SSH Log-in has not be altered"
+        echo -e "\n  Root SSH log-in has been disabled."
     fi
-    ## Restart the SSH service
     sudo systemctl restart ssh
-    ## Complete Message
-    echo -e "\n  OpenSSH installation and configuration complete.\n"
-else
-    echo -e "\n  Skipping OpenSSH installation and configuration.\n"
-fi
+    echo -e "\n  OpenSSH installation complete.\n"
 
-##
-### INSTALL - GIT
-if [ "$install_git" = true ]; then
-    echo -e "\n - INSTALLING - Git - \n"
+}
+
+add_ssh_key() {
+    echo -e "\n  Adding ssh public key..."
+    mkdir -p ~/.ssh
+    echo "$SSH_PUBLIC_KEY" >>~/.ssh/authorized_keys
+    chmod 700 ~/.ssh
+    chmod 600 ~/.ssh/authorized_keys
+    chown -R $USER:$USER ~/.ssh
+    sudo systemctl restart ssh
+    echo -e "\n  SSH public key added successfully.\n"
+}
+
+install_git() {
+    echo -e "\n  Installing Git...\n"
     sudo apt install -y git
+    echo -e "\n  Git installation complete.\n"
+}
 
-    ## Optionally, global Git settings
-    #git config --global user.name "Your Name"
-    #git config --global user.email "your.email@example.com"
-
-    echo -e "\n  Git installation and configuration complete.\n"
-else
-    echo -e "\n  Skipping Git installation.\n"
-fi
-
-##
-### INSTALL - ANSIBLE
-if [ "$install_ansible" = true ]; then
-    echo -e "\n - INSTALLING - Ansible - \n"
+install_ansible() {
+    echo -e "\n  Installing Ansible...\n"
     sudo apt install -y ansible
     echo -e "\n  Ansible installation complete.\n"
-else
-    echo -e "\n  Skipping Ansible installation.\n"
-fi
+}
 
-##
-### DEPLOY - SSH PUBLIC KEY
-## Ensure .ssh directory and public key present
-mkdir -p ~/.ssh && echo "$SSH_PUBLIC_KEY" >>~/.ssh/authorized_keys
-## Set directory and file permissions
-chmod 700 ~/.ssh && chmod 600 ~/.ssh/authorized_keys
-## Ensure ownership ~/.ssh/ and authorized_keys file
-chown -R $USER:$USER /home/$USER/.ssh
-## Restart SSH service
-systemctl restart ssh
-echo "SSH public key added successfully."
+cleanup_script() {
+    SCRIPT_DIR=$(dirname "$(realpath "$0")")
+    HOME_DIR="$HOME"
 
-##
-### DELETE SCRIPT - IF IN A HOME FOLDER
-## Get the script's current directory
-SCRIPT_DIR=$(dirname "$(realpath "$0")")
-## Get the user's home directory
-HOME_DIR="$HOME"
-## Check if the script is located in the home directory
-if [[ "$SCRIPT_DIR" == "$HOME_DIR" ]]; then
-    echo -e "\n  The script ran successfully and will be removed."
-    ## delete after execution
-    rm -- "$0"
-else
-    echo -e "\n  the script is located at $SCRIPT_DIR and has not been removed."
-fi
+    if [[ "$SCRIPT_DIR" == "$HOME_DIR" ]]; then
+        rm -- "$0"
+        echo -e "\n  The script has been removed.\n"
+    fi
+}
 
-##
-### END MESSAGE
+### - MAIN -
+echo -e "\n --- STARTING - SYSTEM BOOTSTRAP SEED --- \n"
+echo "Please enter your sudo password to continue:"
+sudo -v # Prompt for sudo password
+
+[ "$UPDATE_UPGRADE" = true ] && update_system
+[ "$INSTALL_SSH" = true ] && install_ssh
+[ "$ADD_PUBLIC_KEY" = true ] && add_ssh_key
+[ "$INSTALL_GIT" = true ] && install_git
+[ "$INSTALL_ANSIBLE" = true ] && install_ansible
+cleanup_script
+
 echo -e "\n --- SYSTEM BOOTSTRAP SEED - COMPLETED --- \n\n"
