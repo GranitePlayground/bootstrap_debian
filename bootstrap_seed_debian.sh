@@ -29,7 +29,6 @@ install_ssh() {
     fi
     sudo systemctl restart ssh
     echo -e "\n  OpenSSH installation complete.\n"
-
 }
 
 add_ssh_key() {
