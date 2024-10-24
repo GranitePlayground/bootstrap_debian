@@ -8,10 +8,31 @@ INSTALL_SSH=true
 ROOT_SSH_LOCKOUT=true
 INSTALL_GIT=true
 INSTALL_ANSIBLE=true
+
+## Public SSH Key: 2 Optioins - local hard coded - or - dynamic fetch -
 ADD_PUBLIC_KEY=true
 SSH_PUBLIC_KEY= # insert public key here.
+## or URL to fetch SSH public key dynamically
+#SSH_KEY_URL="https://example.com/my_public_key.pub"
 
 ### - FUNCTIONS -
+check_dependencies() {
+    echo -e "\n  Checking Dependancies...\n"
+    command -v apt >/dev/null 2>&1 || {
+        echo >&2 "apt is required but not installed. Aborting."
+        exit 1
+    }
+    command -v sudo >/dev/null 2>&1 || {
+        echo >&2 "sudo is required but not installed. Aborting."
+        exit 1
+    }
+    command -v curl >/dev/null 2>&1 || {
+        echo >&2 "curl is required but not installed. Aborting."
+        exit 1
+    }
+    echo -e "\n  Dependancies passed.\n"
+}
+
 update_system() {
     echo -e "\n  Updating and upgrading system...\n"
     sudo apt update && sudo apt upgrade -y
@@ -35,7 +56,13 @@ install_ssh() {
 add_ssh_key() {
     echo -e "\n  Adding ssh public key..."
     mkdir -p ~/.ssh
+
+    ## SSH Public Key Hardcoaded or Managment File
     echo "$SSH_PUBLIC_KEY" >>~/.ssh/authorized_keys
+    ## or below to point at a management file
+    #echo "Fetching SSH public key from $SSH_KEY_URL"
+    #curl -fsSL "$SSH_KEY_URL" >> ~/.ssh/authorized_keys
+
     chmod 700 ~/.ssh
     chmod 600 ~/.ssh/authorized_keys
     chown -R $USER:$USER ~/.ssh
