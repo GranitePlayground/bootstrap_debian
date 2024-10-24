@@ -1,5 +1,6 @@
 #!/bin/bash
-set -e
+set -e ## Exit on fail
+##
 ### --- Debian Bootstrap Seed ---
 
 ### - VARS -
