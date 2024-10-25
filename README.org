@@ -25,7 +25,6 @@ Variables can be changed at the top of the script as needed
 
 
 ** Todo:
-+ add git user info injections
-  - ask at beginning
-  - inject or default as provided
-+ add ssh public key deployment
+***** TEST
+ - ssh public key dynamic deployment
+ - git name and email function

@@ -2,19 +2,25 @@
 set -e
 ### --- Debian Bootstrap Seed ---
 
+#
 ### - VARS -
-UPDATE_UPGRADE=true
-INSTALL_SSH=true
-ROOT_SSH_LOCKOUT=true
-INSTALL_GIT=true
+APT_UPDATE_UPGRADE=true
 INSTALL_ANSIBLE=true
 
-## Public SSH Key: 2 Optioins - local hard coded - or - dynamic fetch -
-ADD_PUBLIC_KEY=true
-SSH_PUBLIC_KEY= # insert public key here.
-## or URL to fetch SSH public key dynamically
-#SSH_KEY_URL="https://example.com/my_public_key.pub"
+INSTALL_GIT=true
+GIT_USER=""       ## $USER
+GIT_USER_EMAIL="" ## email here
 
+SSH_ENABLE=true
+SSH_ROOT_LOCKOUT=true
+## Public SSH Key: 2 Optioins - local hard coded - or - dynamic fetch -
+SSH_ADD_PUBLIC_KEY=true
+## Hard-coded ssh_key
+SSH_PUBLIC_KEY="ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCp2S2vS0PZnw7hCBoEo+N4CXiw0rfz2mBPxTHZ4jglqizM0d4ImT8FaEzfTFmmdVBHkt1mNHhexRbEK2lqA+C1E82ANHYu+tHG+O0ct7QOUJ2E7GaacybUiskco1l24fRh5wDvs+PoEPyGGJylN1xd7ESvDN5f/J3KKvnww7vPg7zpNYJeC1c6QXVwmCm7bC/aBjMC+N4jyl5t7AkYmU1wWcLmVhJzOI3jm4iuD4jiniMupdl+y0prI14TIY+WjvafdknRda8I44FagRV7uzFutBF1NongB23GHulQHOZgK+TF1qdu8ozjV9r4aC5uUmPv+bQ1brhtZiJdkbEVLFXFdDIKys+HvivU2plENpbSbG788BEgXCq1CxdWLFXCOlanFhiAT1Xgxq73j4XcWIaG9YDvg9qjzX936OfJ6YetQEXUYcKwr6YH4YRQt+b1befH8FcREOuLmqmR+qUfrAbdlWtaNp0w4Ws4DXPXcna4Kvf26z+NhYLagC4BeICqf9M= laverne@Laverne.local" # insert public key here.
+## or URL fetch SSH public key dynamically (SSH_PUBLIC_KEY President-Over SSH_KEY_URL)
+SSH_KEY_URL="" ## URL for dynamic public ssh_key
+
+#
 ### - FUNCTIONS -
 check_dependencies() {
     echo -e "\n  Checking Dependancies...\n"
@@ -42,12 +48,12 @@ update_system() {
 install_ssh() {
     echo -e "\n  Installing OpenSSH server...\n"
     sudo apt install -y openssh-server
-    sudo systemctl enable ssh
+    [[ "$SSH_ENABLE" = true ]] && sudo systemctl enable ssh
     sudo systemctl start ssh
-    if [ "$ROOT_SSH_LOCKOUT" = true ]; then
+    [[ "$SSH_ROOT_LOCKOUT" = true ]] && {
         sudo sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin no/' /etc/ssh/sshd_config
         echo -e "\n  Root SSH log-in has been disabled."
-    fi
+    }
     sudo systemctl restart ssh
     echo -e "\n  OpenSSH installation complete.\n"
 
@@ -58,8 +64,15 @@ add_ssh_key() {
     mkdir -p ~/.ssh
 
     ## SSH Public Key Hardcoaded or Managment File
-    echo "$SSH_PUBLIC_KEY" >>~/.ssh/authorized_keys
-    ## or below to point at a management file
+    # Use hardcoded key if provided, otherwise fetch from URL
+    [[ -n "$SSH_PUBLIC_KEY" ]] && echo "Using hardcoded SSH public key." && echo "$SSH_PUBLIC_KEY" >>~/.ssh/authorized_keys
+    [[ -z "$SSH_PUBLIC_KEY" && -n "$SSH_KEY_URL" ]] && echo "Fetching SSH public key from $SSH_KEY_URL" && curl -fsSL "$SSH_KEY_URL" >>~/.ssh/authorized_keys
+    # If no key was added, show error
+    [[ -z "$SSH_PUBLIC_KEY" && -z "$SSH_KEY_URL" ]] && echo "Error: No SSH public key provided or URL to fetch from." >&2 && return 1
+
+    #### TEST ABOVE THEN REMOVE #####
+    #echo "$SSH_PUBLIC_KEY" >>~/.ssh/authorized_keys
+    ## OR...below to point at a management file
     #echo "Fetching SSH public key from $SSH_KEY_URL"
     #curl -fsSL "$SSH_KEY_URL" >> ~/.ssh/authorized_keys
 
@@ -73,6 +86,11 @@ add_ssh_key() {
 install_git() {
     echo -e "\n  Installing Git...\n"
     sudo apt install -y git
+
+    ## Optionally, global Git settings
+    [[ -n "${GIT_USER// /}" && "$GIT_USER" != \#* ]] && git config --global user.name "${GIT_USER}"
+    [[ -n "${GIT_USER_EMAIL// /}" && "$GIT_USER_EMAIL" != \#* ]] && git config --global user.email "${GIT_USER_EMAIL}"
+
     echo -e "\n  Git installation complete.\n"
 }
 
@@ -86,20 +104,21 @@ cleanup_script() {
     SCRIPT_DIR=$(dirname "$(realpath "$0")")
     HOME_DIR="$HOME"
 
-    if [[ "$SCRIPT_DIR" == "$HOME_DIR" ]]; then
+    [[ "$SCRIPT_DIR" == "$HOME_DIR" ]] && {
         rm -- "$0"
         echo -e "\n  The script has been removed.\n"
-    fi
+    }
 }
 
+#
 ### - MAIN -
 echo -e "\n --- STARTING - SYSTEM BOOTSTRAP SEED --- \n"
 echo "Please enter your sudo password to continue:"
 sudo -v # Prompt for sudo password
 
-[ "$UPDATE_UPGRADE" = true ] && update_system
-[ "$INSTALL_SSH" = true ] && install_ssh
-[ "$ADD_PUBLIC_KEY" = true ] && add_ssh_key
+[ "$APT_UPDATE_UPGRADE" = true ] && update_system
+install_ssh
+[ "$SSH_ADD_PUBLIC_KEY" = true ] && add_ssh_key
 [ "$INSTALL_GIT" = true ] && install_git
 [ "$INSTALL_ANSIBLE" = true ] && install_ansible
 cleanup_script
