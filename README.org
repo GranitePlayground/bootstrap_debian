@@ -22,10 +22,3 @@ Variables can be changed at the top of the script as needed
    - ~wget https://raw.githubusercontent.com/GranitePlayground/bootstrap_seed_debian/refs/heads/main/bootstrap_seed_debian.sh~
 2. ~chmod +x bootstrap_seed_debian.ssh~
 3. ~bash bootstrap_seed_debian.sh~
-
-
-** Todo:
-+ add git user info injections
-  - ask at beginning
-  - inject or default as provided
-+ add ssh public key deployment
