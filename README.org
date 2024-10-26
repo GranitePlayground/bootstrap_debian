@@ -1,30 +1,1 @@
-#+title: Readme - Bootstrap Seed for Debian Family Linux
-#+date: <2024-10-23 Wed>
-
-** Notes:
-This bash script is designed to quickly take a fresh install of Debian family linux to the point of Anible automation.
-WARNING - root ssh lockout is default behavior
-NOTE - This script is designed remove itself when run from your home folder.
-
-  - Apt - update and upgrade
-  - openSSH - install and configure
-  - Git - install
-  - Ansible - install
-  - remove script from home folder
-
-
-** Use:
-Variables can be changed at the top of the script as needed
-- WARNING - root ssh lockout is default behavior
-- NOTE - This script is designed remove itself after running from your home directory.
-
-1. pull the script from Github
-   - ~wget https://raw.githubusercontent.com/GranitePlayground/bootstrap_seed_debian/refs/heads/main/bootstrap_seed_debian.sh~
-2. ~chmod +x bootstrap_seed_debian.ssh~
-3. ~bash bootstrap_seed_debian.sh~
-
-
-** Todo:
-***** TEST
- - ssh public key dynamic deployment
- - git name and email function
+#+title: Readme - Bootstrap Seed for Debian Family Linux#+date: <2024-10-23 Wed>** Notes:This bash script is designed to quickly take a fresh install of Debian family linux to the point of Anible automation.WARNING - root ssh lockout is default behaviorNOTE - This script is designed remove itself when run from your home folder.  - Apt - update and upgrade  - openSSH - install and configure  - Git - install  - Ansible - install  - remove script from home folder** Use:Variables can be changed at the top of the script as needed- WARNING - root ssh lockout is default behavior- NOTE - This script is designed remove itself after running from your home directory.1. pull the script from Github   - ~wget https://raw.githubusercontent.com/GranitePlayground/bootstrap_seed_debian/refs/heads/main/bootstrap_seed_debian.sh~2. ~chmod +x bootstrap_seed_debian.ssh~3. ~bash bootstrap_seed_debian.sh~** Todo:***** Work on - add_ssh_key:   - default behavior if no key or url present.       fail & warn       pass & warn       pass quickly don't lock out root_ssh - figure out how to avoid redundant creation   - look at ssh authorized keys   - root_ssh_lockout

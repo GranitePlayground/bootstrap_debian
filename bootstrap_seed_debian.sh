@@ -65,10 +65,10 @@ add_ssh_key() {
 
     ## SSH Public Key Hardcoaded or Managment File
     # Use hardcoded key if provided, otherwise fetch from URL
-    [[ -n "$SSH_PUBLIC_KEY" ]] && echo "Using hardcoded SSH public key." && echo "$SSH_PUBLIC_KEY" >>~/.ssh/authorized_keys
-    [[ -z "$SSH_PUBLIC_KEY" && -n "$SSH_KEY_URL" ]] && echo "Fetching SSH public key from $SSH_KEY_URL" && curl -fsSL "$SSH_KEY_URL" >>~/.ssh/authorized_keys
+    [[ -n "$SSH_PUBLIC_KEY" ]] && echo -e "\n  Using hardcoded SSH public key." && echo "$SSH_PUBLIC_KEY" >>~/.ssh/authorized_keys
+    [[ -z "$SSH_PUBLIC_KEY" && -n "$SSH_KEY_URL" ]] && echo -e "\n  Fetching SSH public key from $SSH_KEY_URL" && curl -fsSL "$SSH_KEY_URL" >>~/.ssh/authorized_keys
     # If no key was added, show error
-    [[ -z "$SSH_PUBLIC_KEY" && -z "$SSH_KEY_URL" ]] && echo "Error: No SSH public key provided or URL to fetch from." >&2 && return 1
+    [[ -z "$SSH_PUBLIC_KEY" && -z "$SSH_KEY_URL" ]] && echo -e "\n  Error: No SSH public key provided or URL to fetch from." >&2 && return 1
 
     #### TEST ABOVE THEN REMOVE #####
     #echo "$SSH_PUBLIC_KEY" >>~/.ssh/authorized_keys
