@@ -70,12 +70,6 @@ add_ssh_key() {
     # If no key was added, show error
     [[ -z "$SSH_PUBLIC_KEY" && -z "$SSH_KEY_URL" ]] && echo -e "\n  Error: No SSH public key provided or URL to fetch from." >&2 && return 1
 
-    #### TEST ABOVE THEN REMOVE #####
-    #echo "$SSH_PUBLIC_KEY" >>~/.ssh/authorized_keys
-    ## OR...below to point at a management file
-    #echo "Fetching SSH public key from $SSH_KEY_URL"
-    #curl -fsSL "$SSH_KEY_URL" >> ~/.ssh/authorized_keys
-
     chmod 700 ~/.ssh
     chmod 600 ~/.ssh/authorized_keys
     chown -R $USER:$USER ~/.ssh
