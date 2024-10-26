@@ -14,10 +14,10 @@ This bash script quickly take a fresh install of Debian/Ubuntu family Linux to t
 - Cleanup - Remove script if run from home folder
 
 ** Requirements:
-- Debian/Ubuntu family Operating System
-  - bash
-  - apt
-- Internet
+Debian/Ubuntu family Operating System
+- Internet access
+- bash
+- apt
 - wget
 
 ** Use:
