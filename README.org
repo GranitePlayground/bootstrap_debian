@@ -1,24 +1,29 @@
 #+title: Readme - Bootstrap Seed for Debian Family Linux
 #+date: <2024-10-23 Wed>
 
-** Notes:
-This bash script is designed to quickly take a fresh install of Debian family linux to the point of Anible automation.
-WARNING - root ssh lockout is default behavior
-NOTE - This script is designed remove itself when run from your home folder.
+** About:
+This bash script quickly take a fresh install of Debian/Ubuntu family Linux to the point of Anible automation.
+  + WARNING - root ssh lockout is default behavior
+*** Actions:
+- apt - update and upgrade
+- OpenSSH - Install and configure
+  - Block root ssh access
+- Deploy ssh public key
+- Git - Install
+- Ansible - Install
+- Cleanup - Remove script if run from home folder
 
-  - Apt - update and upgrade
-  - openSSH - install and configure
-  - Git - install
-  - Ansible - install
-  - remove script from home folder
-
+** Requirements:
+- Debian/Ubuntu family Operating System
+  - bash
+  - apt
+- Internet
+- wget
 
 ** Use:
-Variables can be changed at the top of the script as needed
-- WARNING - root ssh lockout is default behavior
-- NOTE - This script is designed remove itself after running from your home directory.
-
-1. pull the script from Github
+1. Pull the script from Github
    - ~wget https://raw.githubusercontent.com/GranitePlayground/bootstrap_seed_debian/refs/heads/main/bootstrap_seed_debian.sh~
-2. ~chmod +x bootstrap_seed_debian.ssh~
-3. ~bash bootstrap_seed_debian.sh~
+2. Check/edit variables at the top of the script
+3. Run Script
+   - ~bash bootstrap_seed_debian.sh~
+   a. if needed run ~chmod +x bootstrap_seed_debian.sh~ to give execute permissions
