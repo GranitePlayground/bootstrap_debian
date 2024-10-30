@@ -2,7 +2,7 @@
 #+date: <2024-10-23 Wed>
 
 ** About:
-This bash script quickly take a fresh install of Debian/Ubuntu family Linux to the point of Anible automation.
+This bash script quickly takes a fresh install of Debian/Ubuntu family Linux to the point of Ansible automation.
   + WARNING - root ssh lockout is default behavior
 *** Actions:
 - apt - update and upgrade
@@ -24,6 +24,6 @@ Debian/Ubuntu family Operating System
 1. Pull the script from Github
    - ~wget https://raw.githubusercontent.com/GranitePlayground/bootstrap_seed_debian/refs/heads/main/bootstrap_seed_debian.sh~
 2. Check/edit variables at the top of the script
-3. Run Script
+3. Run script
    - ~bash bootstrap_seed_debian.sh~
-   a. if needed run ~chmod +x bootstrap_seed_debian.sh~ to give execute permissions
+   a. If needed run ~chmod +x bootstrap_seed_debian.sh~ to give execute permissions
