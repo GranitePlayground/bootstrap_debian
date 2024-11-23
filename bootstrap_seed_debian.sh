@@ -6,11 +6,6 @@ set -e ## Exit on fail
 #
 ### - VARS -
 APT_UPDATE_UPGRADE=true
-INSTALL_ANSIBLE=true
-
-INSTALL_GIT=true
-GIT_USER=""       ## $USER
-GIT_USER_EMAIL="" ## email here
 
 SSH_ENABLE=true
 SSH_ROOT_LOCKOUT=true
@@ -20,6 +15,12 @@ SSH_ADD_PUBLIC_KEY=true
 SSH_PUBLIC_KEY="ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCp2S2vS0PZnw7hCBoEo+N4CXiw0rfz2mBPxTHZ4jglqizM0d4ImT8FaEzfTFmmdVBHkt1mNHhexRbEK2lqA+C1E82ANHYu+tHG+O0ct7QOUJ2E7GaacybUiskco1l24fRh5wDvs+PoEPyGGJylN1xd7ESvDN5f/J3KKvnww7vPg7zpNYJeC1c6QXVwmCm7bC/aBjMC+N4jyl5t7AkYmU1wWcLmVhJzOI3jm4iuD4jiniMupdl+y0prI14TIY+WjvafdknRda8I44FagRV7uzFutBF1NongB23GHulQHOZgK+TF1qdu8ozjV9r4aC5uUmPv+bQ1brhtZiJdkbEVLFXFdDIKys+HvivU2plENpbSbG788BEgXCq1CxdWLFXCOlanFhiAT1Xgxq73j4XcWIaG9YDvg9qjzX936OfJ6YetQEXUYcKwr6YH4YRQt+b1befH8FcREOuLmqmR+qUfrAbdlWtaNp0w4Ws4DXPXcna4Kvf26z+NhYLagC4BeICqf9M= laverne@Laverne.local" # insert public key here.
 ## or URL fetch SSH public key dynamically (SSH_PUBLIC_KEY Takes Precedence Over SSH_KEY_URL)
 SSH_KEY_URL="" ## URL for dynamic public ssh_key
+
+INSTALL_ANSIBLE=false
+
+INSTALL_GIT=false
+GIT_USER=""       ## $USER
+GIT_USER_EMAIL="" ## email here
 
 #
 ### - FUNCTIONS -
