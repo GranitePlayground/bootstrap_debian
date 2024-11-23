@@ -30,4 +30,5 @@ Debian/Ubuntu family Operating System
 2. Check/edit variables at the top of the script
 3. Run script
    - ~bash bootstrap_seed_debian.sh~
+   - Input sudo password
 *NOTE:* If needed run ~chmod +x bootstrap_seed_debian.sh~ to give execute permissions
